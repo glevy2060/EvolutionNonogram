@@ -15,12 +15,12 @@ def main():
     # example:
     upper_ob = [[1, 3], [2], [5], [3], [1]]
     lower_ob = [[3], [4], [1, 2], [2], [1, 1, 1]]
-    obligations = np.asarray([upper_ob, lower_ob])
-
+    clues = np.asarray([upper_ob, lower_ob], dtype=object)
+    population_size = 300
     algo = SimpleEvolution(
-        Subpopulation(creators=NonogramVectorCreator(length=len(obligations[0])),
-                      population_size=1000,
-                      evaluator=NonogramEvaluator(obligations),
+        Subpopulation(creators=NonogramVectorCreator(length=len(clues[0])),
+                      population_size=population_size,
+                      evaluator=NonogramEvaluator(clues),
                       higher_is_better=False,
                       elitism_rate=1/300,
                       # genetic operators sequence to be applied in each generation

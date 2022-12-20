@@ -8,30 +8,30 @@ from eckity.evaluators.simple_individual_evaluator import SimpleIndividualEvalua
 class NonogramEvaluator(SimpleIndividualEvaluator):
 
     def __init__(self,
-                 obligations):  # obligations represents the nonogram headers, the fitness is calculated by the
-        self.obligations = obligations
+                 clues):  # obligations represents the nonogram headers, the fitness is calculated by the
+        self.clues = clues
         super().__init__()
 
 
     def _evaluate_individual(self, individual):  # fitness function
         # example:
-        # upper_ob = [[1, 3], [2], [5], [3], [1]]
+        # col_clues = [[1, 3], [2], [5], [3], [1]]
         # lower_ob = [[3], [4], [1, 2], [2], [1, 1, 1]]
-        # obligations = np.asarray([upper_ob, lower_ob])
+        # obligations = np.asarray([col_clues, lower_ob])
 
-        upper_ob = self.obligations[0]
-        left_ob = self.obligations[1]
-        total_fitness = 0
+        col_clues = self.clues[0]
+        row_clues = self.clues[1]
+        fitness = 0
         nonogram = individual.vector
         for i, row in enumerate(nonogram):
-            left_obligation_of_row_i = left_ob[i]
-            total_fitness += self.eval_row_col(row, left_obligation_of_row_i)
+            row_i_clues = row_clues[i]
+            fitness += self.eval_row_col(row, row_i_clues)
 
         for j, column in enumerate(nonogram.T):
-            upper_obligation_of_col_j = upper_ob[j]
-            total_fitness += self.eval_row_col(column, upper_obligation_of_col_j)
+            col_i_clues = col_clues[j]
+            fitness += self.eval_row_col(column, col_i_clues)
 
-        return total_fitness
+        return fitness
 
     def pad_with_zeros(self, array1, array2):
         # Find the difference in length between the two arrays
@@ -42,15 +42,15 @@ class NonogramEvaluator(SimpleIndividualEvaluator):
             array2 = np.pad(array2, (0, -diff), 'constant', constant_values=0)
         return array1, array2
 
-    def eval_row_col(self, row, real_obligation):
+    def eval_row_col(self, row, real_row_clue):
         # row: [1, 0, 0, 1, 0]
         # row_obligation: [1, 2]
-        fake_obligation = self.create_fake_obligation_from_row(row)
-        fake_obligation, real_obligation = self.pad_with_zeros(fake_obligation, real_obligation)
-        return np.sum(np.abs(fake_obligation - real_obligation))  # sums the difference between the result row and the real obligation
+        fake_row_clue = self.generate_fake_clue_based_on_row(row)
+        fake_row_clue, real_row_clue = self.pad_with_zeros(fake_row_clue, real_row_clue)
+        return np.sum(np.abs(fake_row_clue - real_row_clue))  # sums the difference between the result row and the real obligation
 
 
-    def create_fake_obligation_from_row(self, row):
+    def generate_fake_clue_based_on_row(self, row):
         sequences = []
         i = 0
         while i < len(row):

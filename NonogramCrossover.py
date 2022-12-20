@@ -3,7 +3,7 @@ import random
 from eckity.genetic_operators.genetic_operator import GeneticOperator
 
 class NonogramCrossover(GeneticOperator):
-    def __init__(self, probability=1, arity=2, k=1, events=None):
+    def __init__(self, probability=1, arity=2, k=2, events=None):
         """
             Vector N Point Mutation.
             Randomly chooses N vector cells and performs a small change in their values.
@@ -28,8 +28,9 @@ class NonogramCrossover(GeneticOperator):
         self.individuals = individuals
         self.points = sorted(random.sample(range(0, len(individuals[0].vector)), self.k))
 
+        start_index = 0
         for end_point in self.points:
-            replaced_part = individuals[0].get_vector_part(0, end_point)
+            replaced_part = individuals[0].get_vector_part(start_index, end_point)
             replaced_part = individuals[1].replace_vector_row_random(replaced_part)
             individuals[0].replace_vector_row_random(replaced_part)
             start_index = end_point

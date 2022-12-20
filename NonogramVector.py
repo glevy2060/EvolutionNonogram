@@ -12,6 +12,7 @@ class NonogramVector(Individual):
 
         self.length = length
         self.vector = []
+        self.block_distance_vector = []
 
     def create_nonogram_with_length(self, length):
         return np.random.randint(2, size=(length, length))  ##todo think if its good enaugh, how to avoid duplications
@@ -19,6 +20,12 @@ class NonogramVector(Individual):
     def set_vector(self, vector):
         self.vector = vector
         self.length = len(vector)
+
+    def set_block_distance_vector(self, block_distance_vector):
+        self.block_distance_vector = block_distance_vector
+
+    def get_vector(self):
+        return self.vector
 
     def get_vector_part(self, index, end_i):
         """
@@ -71,3 +78,21 @@ class NonogramVector(Individual):
         None.
         """
         print(self.vector)
+
+
+    def execute(self, *args, **kwargs):
+        """
+        Execute the vector.
+        Input is a numpy array or keyword arguments (but not both).
+        Parameters
+        ----------
+        args : arguments
+            A numpy array, this is mostly relevant to GP representation.
+        kwargs : keyword arguments
+            Input to program, this is mostly relevant to GP representation.
+        Returns
+        -------
+        object
+            Vector (genome) of this individual.
+        """
+        return self.get_vector()
