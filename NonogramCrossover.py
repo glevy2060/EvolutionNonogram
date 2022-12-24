@@ -31,8 +31,8 @@ class NonogramCrossover(GeneticOperator):
         start_index = 0
         for end_point in self.points:
             replaced_part = individuals[0].get_vector_part(start_index, end_point)
-            replaced_part = individuals[1].replace_vector_row_random(replaced_part)
-            individuals[0].replace_vector_row_random(replaced_part)
+            replaced_part = individuals[1].replace_vector_row_random(replaced_part, start_index, end_point)
+            individuals[0].replace_vector_row_random(replaced_part, start_index, end_point)
             start_index = end_point
 
         self.applied_individuals = individuals

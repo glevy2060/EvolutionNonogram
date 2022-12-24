@@ -13,12 +13,15 @@ def main():
     # Initialize the evolutionary algorithm
 
     # example:
-    upper_ob = [[1, 3], [2], [5], [3], [1]]
-    lower_ob = [[3], [4], [1, 2], [2], [1, 1, 1]]
-    clues = np.asarray([upper_ob, lower_ob], dtype=object)
+    # row_clues = [[3, 3], [2, 4, 2], [1,1], [1,2, 2,1], [1,1,1], [2, 2,2], [1,1], [1,2,1], [2,2], [6]]
+    # col_clues = [[5], [4, 2], [2, 1, 1], [1, 1, 2], [1, 1, 2, 1], [1,1,1,1,1], [1, 1, 2], [2, 1], [4,2], [5]]
+    # clues = np.asarray([col_clues, row_clues], dtype=object)
+    col_clues = [[1, 3], [2], [5], [3], [1]]
+    row_clues = [[3], [4], [1, 2], [2], [1, 1, 1]]
+    clues = np.asarray([col_clues, row_clues])
     population_size = 300
     algo = SimpleEvolution(
-        Subpopulation(creators=NonogramVectorCreator(length=len(clues[0])),
+        Subpopulation(creators=NonogramVectorCreator(length=len(clues[0]), row_clues= row_clues),
                       population_size=population_size,
                       evaluator=NonogramEvaluator(clues),
                       higher_is_better=False,
@@ -35,7 +38,7 @@ def main():
                       ),
         breeder=SimpleBreeder(),
         max_workers=4,
-        max_generation=4,
+        max_generation=200,
         # population_evaluator=
         # termination_checker=ThresholdFromTargetTerminationChecker(optimal=100, threshold=0.0),
         # statistics=BestAverageWorstStatistics()

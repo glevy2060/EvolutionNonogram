@@ -23,9 +23,9 @@ class NonogramEvaluator(SimpleIndividualEvaluator):
         row_clues = self.clues[1]
         fitness = 0
         nonogram = individual.vector
-        for i, row in enumerate(nonogram):
-            row_i_clues = row_clues[i]
-            fitness += self.eval_row_col(row, row_i_clues)
+        # for i, row in enumerate(nonogram):
+        #     row_i_clues = row_clues[i]
+        #     fitness += self.eval_row_col(row, row_i_clues)
 
         for j, column in enumerate(nonogram.T):
             col_i_clues = col_clues[j]
@@ -33,22 +33,32 @@ class NonogramEvaluator(SimpleIndividualEvaluator):
 
         return fitness
 
-    def pad_with_zeros(self, array1, array2):
+    def pad_with_zeros(self, array1, array2, pad_from_left = False):
         # Find the difference in length between the two arrays
         diff = len(array2) - len(array1)
+
         if diff > 0:
-            array1 = np.pad(array1, (0, diff), 'constant', constant_values=0)
+            padd = (diff, 0) if pad_from_left is True else (0, diff)
+            array1 = np.pad(array1, padd, 'constant', constant_values=0)
         elif diff < 0:
-            array2 = np.pad(array2, (0, -diff), 'constant', constant_values=0)
+            padd = (-diff, 0) if pad_from_left is True else (0, -diff)
+            array2 = np.pad(array2, padd, 'constant', constant_values=0)
         return array1, array2
 
     def eval_row_col(self, row, real_row_clue):
         # row: [1, 0, 0, 1, 0]
         # row_obligation: [1, 2]
         fake_row_clue = self.generate_fake_clue_based_on_row(row)
-        fake_row_clue, real_row_clue = self.pad_with_zeros(fake_row_clue, real_row_clue)
-        return np.sum(np.abs(fake_row_clue - real_row_clue))  # sums the difference between the result row and the real obligation
+        # fake_row_clue, real_row_clue = self.pad_with_zeros(fake_row_clue, real_row_clue)
+        return self.eval_by_padding(fake_row_clue, real_row_clue)
 
+    def eval_by_padding(self, fake_row_clue, real_row_clue):
+        fake_row_clue_left, real_row_clue_left = self.pad_with_zeros(fake_row_clue, real_row_clue, pad_from_left=True)
+        fitness_left = np.sum(np.abs(fake_row_clue_left - real_row_clue_left))
+        return fitness_left
+        # fake_row_clue_right, real_row_clue_right = self.pad_with_zeros(fake_row_clue, real_row_clue, pad_from_left=False)
+        # fitness_right = np.sum(np.abs(fake_row_clue_right - real_row_clue_right))
+        # return min(fitness_left, fitness_right)
 
     def generate_fake_clue_based_on_row(self, row):
         sequences = []

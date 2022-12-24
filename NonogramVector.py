@@ -28,22 +28,10 @@ class NonogramVector(Individual):
         return self.vector
 
     def get_vector_part(self, index, end_i):
-        """
-        Return vector part from `index` to `end_i`
-        Parameters
-        -------
-        index: int
-            starting index
-        end_i: int
-            end index
-        Returns
-        -------
-        list
-            sub-vector genome
-        """
+        # Return vector part from `index` to `end_i'
         return self.vector[index:end_i]
 
-    def replace_vector_row_random(self, inserted_part):
+    def replace_vector_row_random(self, inserted_part, start_index, end_index):
         """
         Replace a given vector part in a random position
         Parameters
@@ -63,10 +51,15 @@ class NonogramVector(Individual):
             raise ValueError("New rows must have the same number of columns as the self matrix.")
 
         # Insert the new rows at the beginning of the self matrix
-        index = randint(0, len(self.vector) - len(inserted_part))  # select a random index
-        end_i = index + len(inserted_part)
-        replaced_part = self.vector[index:end_i]
-        self.vector = np.concatenate((self.vector[:index],inserted_part, self.vector[end_i:]), axis=0)
+        # index = randint(0, len(self.vector) - len(inserted_part))  # select a random index
+        # end_i = index + len(inserted_part)
+        # replaced_part = self.vector[index:end_i]
+        # self.vector = np.concatenate((self.vector[:index],inserted_part, self.vector[end_i:]), axis=0)
+
+        # index = randint(0, len(self.vector) - len(inserted_part))  # select a random index
+        # end_i = index + len(inserted_part)
+        replaced_part = self.vector[start_index:end_index]
+        self.vector = np.concatenate((self.vector[:start_index],inserted_part, self.vector[end_index:]), axis=0)
         return replaced_part
 
 
