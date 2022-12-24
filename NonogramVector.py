@@ -12,7 +12,6 @@ class NonogramVector(Individual):
 
         self.length = length
         self.vector = []
-        self.block_distance_vector = []
 
     def create_nonogram_with_length(self, length):
         return np.random.randint(2, size=(length, length))  ##todo think if its good enaugh, how to avoid duplications
