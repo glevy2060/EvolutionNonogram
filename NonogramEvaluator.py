@@ -26,7 +26,11 @@ class NonogramEvaluator(SimpleIndividualEvaluator):
         # for i, row in enumerate(nonogram):
         #     row_i_clues = row_clues[i]
         #     fitness += self.eval_row_col(row, row_i_clues)
-
+        nonogram = np.asarray([[ 1.  ,1. , 1., -1., -1.],
+ [ 1.,  1.,  1.,  1., -1.],
+ [ 1., -1.,  1.,  1., -1.],
+ [-1., -1.,  1.,  1., -1.],
+ [ 1., -1.,  1., -1.,  1.]])
         for j, column in enumerate(nonogram.T):
             col_i_clues = col_clues[j]
             fitness += self.eval_row_col(column, col_i_clues)

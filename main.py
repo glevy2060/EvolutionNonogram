@@ -16,8 +16,13 @@ def main():
     # row_clues = [[3, 3], [2, 4, 2], [1,1], [1,2, 2,1], [1,1,1], [2, 2,2], [1,1], [1,2,1], [2,2], [6]]
     # col_clues = [[5], [4, 2], [2, 1, 1], [1, 1, 2], [1, 1, 2, 1], [1,1,1,1,1], [1, 1, 2], [2, 1], [4,2], [5]]
     # clues = np.asarray([col_clues, row_clues], dtype=object)
-    col_clues = [[1, 3], [2], [5], [3], [1]]
+    col_clues = [[3, 1], [2], [5], [3], [1]] #clues from top to buttom
     row_clues = [[3], [4], [1, 2], [2], [1, 1, 1]]
+    # sol = np.asarray([[ 1.  ,1. , 1., -1., -1.],
+    #  [ 1.,  1.,  1.,  1., -1.],
+    #  [ 1., -1.,  1.,  1., -1.],
+    #  [-1., -1.,  1.,  1., -1.],
+    #  [ 1., -1.,  1., -1.,  1.]])
     clues = np.asarray([col_clues, row_clues])
     population_size = 300
     algo = SimpleEvolution(
