@@ -2,16 +2,14 @@ import numpy as np
 from eckity.evaluators.simple_individual_evaluator import SimpleIndividualEvaluator
 
 
-
-
-
 class NonogramEvaluator(SimpleIndividualEvaluator):
 
     def __init__(self,
-                 clues):  # obligations represents the nonogram headers, the fitness is calculated by the
+                 clues,
+                 higher_is_better):  # obligations represents the nonogram headers, the fitness is calculated by the
         self.clues = clues
+        self.higher_is_better = higher_is_better
         super().__init__()
-
 
     def _evaluate_individual(self, individual):  # fitness function
         # example:
@@ -23,14 +21,30 @@ class NonogramEvaluator(SimpleIndividualEvaluator):
         #     row_i_clues = row_clues[i]
         #     fitness += self.eval_row_col(row, row_i_clues)
 
-        col_clues = self.clues[0]
-        fitness = 0
-        nonogram = individual.vector
-        for j, column in enumerate(nonogram.T):
-            col_i_clues = col_clues[j]
-            fitness += self.eval_row_col(column, col_i_clues)
+        '''
+        this is how we check fitness when higher_is_better = False
+        '''
+        # col_clues = self.clues[0]
+        # fitness = 0
+        # nonogram = individual.vector
+        # for j, column in enumerate(nonogram.T):
+        #     col_i_clues = col_clues[j]
+        #     fitness += self.eval_row_col(column, col_i_clues)
+        #
+        # return fitness
 
-        return fitness
+        '''
+        this is how we check fitness when higher_is_better = True
+        '''
+        if self.higher_is_better:
+            col_clues = self.clues[0]
+            fitness = 0
+            nonogram = individual.vector
+            for j, column in enumerate(nonogram.T):
+                col_i_clues = col_clues[j]
+                fitness += self.eval_row_col(column, col_i_clues)
+
+            return fitness
 
     def pad_with_zeros(self, array1, array2, pad_from_left = False):
         # Find the difference in length between the two arrays
@@ -52,12 +66,18 @@ class NonogramEvaluator(SimpleIndividualEvaluator):
 
     def eval_by_padding(self, fake_row_clue, real_row_clue):
         fake_row_clue_left, real_row_clue_left = self.pad_with_zeros(fake_row_clue, real_row_clue, pad_from_left=True)
-        fitness_left = np.sum(np.abs(fake_row_clue_left - real_row_clue_left))
-
         fake_row_clue_right, real_row_clue_right = self.pad_with_zeros(fake_row_clue, real_row_clue, pad_from_left=False)
-        fitness_right = np.sum(np.abs(fake_row_clue_right - real_row_clue_right))
 
-        return min(fitness_left, fitness_right)
+        if self.higher_is_better:  # count the number of entries that fits
+            fitness_left = np.sum(np.equal(fake_row_clue_left, real_row_clue_left))
+            fitness_right = np.sum(np.equal(fake_row_clue_right, real_row_clue_right))
+            return max(fitness_left, fitness_right)
+        else:  # count the difference in entries
+            fitness_left = np.sum(np.abs(fake_row_clue_left - real_row_clue_left))
+            fitness_right = np.sum(np.abs(fake_row_clue_right - real_row_clue_right))
+            return min(fitness_left, fitness_right)
+
+
 
     def generate_fake_clue_based_on_row(self, row):
         sequences = []
