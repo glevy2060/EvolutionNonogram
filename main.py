@@ -19,12 +19,12 @@ NUM_EXPERIMENTS = 5
 HIGHER_IS_BETTER = True
 
 
-def main():
+def main(row_clues, col_clues):
     # Initialize the evolutionary algorithm
 
     # example:
-    row_clues = [[3, 3], [2, 4, 2], [1, 1], [1, 2, 2, 1], [1, 1, 1], [2, 2, 2], [1, 1], [1, 2, 1], [2, 2], [6]]
-    col_clues = [[5], [2, 4], [1, 1, 2], [2, 1, 1], [1, 2, 1, 1], [1, 1, 1, 1, 1], [2, 1, 1], [1, 2], [2, 4], [5]]
+    # row_clues = [[3, 3], [2, 4, 2], [1, 1], [1, 2, 2, 1], [1, 1, 1], [2, 2, 2], [1, 1], [1, 2, 1], [2, 2], [6]]
+    # col_clues = [[5], [2, 4], [1, 1, 2], [2, 1, 1], [1, 2, 1, 1], [1, 1, 1, 1, 1], [2, 1, 1], [1, 2], [2, 4], [5]]
 
     # col_clues = [[3, 1], [2], [5], [3], [1]] #clues from top to buttom
     # row_clues = [[3], [4], [1, 2], [2], [1, 1, 1]]
@@ -63,7 +63,7 @@ def main():
                                      with_stat_prints=False,
                                      experiment_manager=experiment_manager),
             # We will change the seed to be a new seed in every experiment, since we don't want duplicate results
-            random_seed=EXPERIMENT_COUNT + 15
+            random_seed=EXPERIMENT_COUNT+1
         )
 
         algo.evolve()
@@ -75,4 +75,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+
+    main(row_clues, col_clues)
