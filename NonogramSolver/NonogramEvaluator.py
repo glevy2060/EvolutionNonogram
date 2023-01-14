@@ -46,7 +46,7 @@ class NonogramEvaluator(SimpleIndividualEvaluator):
 
             return fitness
 
-    def pad_with_zeros(self, array1, array2, pad_from_left = False):
+    def pad_with_zeros(self, array1, array2, pad_from_left=False):
         # Find the difference in length between the two arrays
         diff = len(array2) - len(array1)
 
@@ -66,7 +66,8 @@ class NonogramEvaluator(SimpleIndividualEvaluator):
 
     def eval_by_padding(self, fake_row_clue, real_row_clue):
         fake_row_clue_left, real_row_clue_left = self.pad_with_zeros(fake_row_clue, real_row_clue, pad_from_left=True)
-        fake_row_clue_right, real_row_clue_right = self.pad_with_zeros(fake_row_clue, real_row_clue, pad_from_left=False)
+        fake_row_clue_right, real_row_clue_right = self.pad_with_zeros(fake_row_clue, real_row_clue,
+                                                                       pad_from_left=False)
 
         if self.higher_is_better:  # count the number of entries that fits
             fitness_left = np.sum(np.equal(fake_row_clue_left, real_row_clue_left))
@@ -76,8 +77,6 @@ class NonogramEvaluator(SimpleIndividualEvaluator):
             fitness_left = np.sum(np.abs(fake_row_clue_left - real_row_clue_left))
             fitness_right = np.sum(np.abs(fake_row_clue_right - real_row_clue_right))
             return min(fitness_left, fitness_right)
-
-
 
     def generate_fake_clue_based_on_row(self, row):
         sequences = []

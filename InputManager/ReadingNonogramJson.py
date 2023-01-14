@@ -21,5 +21,5 @@ def process_json_from_file(filepath):
 
 
 if __name__ == '__main__':
-    filepath1 = "nonogram_clues.json"
+    filepath1 = "InputManager/nonogram_clues.json"
     process_json_from_file(filepath1)

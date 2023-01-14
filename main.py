@@ -1,21 +1,19 @@
-import random
-
 from eckity.algorithms.simple_evolution import SimpleEvolution
 from eckity.breeders.simple_breeder import SimpleBreeder
 from eckity.genetic_operators.selections.tournament_selection import TournamentSelection
 from eckity.subpopulation import Subpopulation
 
 from ExperimentManager import ExperimentManager
-from NonogramCrossover import NonogramCrossover
-from NonogramVectorCreator import NonogramVectorCreator
-from NonogramEvaluator import NonogramEvaluator
+from NonogramSolver.NonogramCrossover import NonogramCrossover
+from NonogramSolver.NonogramVectorCreator import NonogramVectorCreator
+from NonogramSolver.NonogramEvaluator import NonogramEvaluator
 import numpy as np
 
 from RunStatistics import RunStatistics
 
 POP_SIZE = 200
 MAX_GEN = 200
-NUM_EXPERIMENTS = 5
+NUM_EXPERIMENTS = 10
 HIGHER_IS_BETTER = True
 
 
