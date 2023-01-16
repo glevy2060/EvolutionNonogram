@@ -30,8 +30,7 @@ def solve_nonogram(row_clues, col_clues):
     #  [ 1., -1.,  1.,  1., -1.],
     #  [-1., -1.,  1.,  1., -1.],
     #  [ 1., -1.,  1., -1.,  1.]])
-    N = len(col_clues)
-    POP_SIZE = N * 10
+    POP_SIZE = popultion_size(col_clues)
     clues = np.asarray([col_clues, row_clues], dtype=object)
     experiment_manager = ExperimentManager(total_num_experiments=NUM_EXPERIMENTS)
     for EXPERIMENT_COUNT in range(NUM_EXPERIMENTS):
@@ -71,6 +70,13 @@ def solve_nonogram(row_clues, col_clues):
     experiment_manager.plot_best_fitness_over_experiments()
     experiment_manager.plot_avg_fitness_over_experiments()
     experiment_manager.plot_best_solution_of_all_experiments()
+
+
+def popultion_size(col_clues):
+    pop_size = 0
+    for col in col_clues:
+        pop_size += len(col)
+    return pop_size ** 2
 
 
 if __name__ == '__main__':
