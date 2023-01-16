@@ -1,30 +1,27 @@
-import random
-
 from eckity.algorithms.simple_evolution import SimpleEvolution
 from eckity.breeders.simple_breeder import SimpleBreeder
 from eckity.genetic_operators.selections.tournament_selection import TournamentSelection
 from eckity.subpopulation import Subpopulation
 
 from ExperimentManager import ExperimentManager
-from NonogramCrossover import NonogramCrossover
-from NonogramVectorCreator import NonogramVectorCreator
-from NonogramEvaluator import NonogramEvaluator
+from NonogramSolver.NonogramCrossover import NonogramCrossover
+from NonogramSolver.NonogramVectorCreator import NonogramVectorCreator
+from NonogramSolver.NonogramEvaluator import NonogramEvaluator
 import numpy as np
-
+from InputManager.ReadingNonogramJson import process_json_from_file
 from RunStatistics import RunStatistics
 
-POP_SIZE = 200
 MAX_GEN = 200
 NUM_EXPERIMENTS = 5
 HIGHER_IS_BETTER = True
 
 
-def main():
+def solve_nonogram(row_clues, col_clues):
     # Initialize the evolutionary algorithm
 
     # example:
-    row_clues = [[3, 3], [2, 4, 2], [1, 1], [1, 2, 2, 1], [1, 1, 1], [2, 2, 2], [1, 1], [1, 2, 1], [2, 2], [6]]
-    col_clues = [[5], [2, 4], [1, 1, 2], [2, 1, 1], [1, 2, 1, 1], [1, 1, 1, 1, 1], [2, 1, 1], [1, 2], [2, 4], [5]]
+    # row_clues = [[3, 3], [2, 4, 2], [1, 1], [1, 2, 2, 1], [1, 1, 1], [2, 2, 2], [1, 1], [1, 2, 1], [2, 2], [6]]
+    # col_clues = [[5], [2, 4], [1, 1, 2], [2, 1, 1], [1, 2, 1, 1], [1, 1, 1, 1, 1], [2, 1, 1], [1, 2], [2, 4], [5]]
 
     # col_clues = [[3, 1], [2], [5], [3], [1]] #clues from top to buttom
     # row_clues = [[3], [4], [1, 2], [2], [1, 1, 1]]
@@ -33,6 +30,8 @@ def main():
     #  [ 1., -1.,  1.,  1., -1.],
     #  [-1., -1.,  1.,  1., -1.],
     #  [ 1., -1.,  1., -1.,  1.]])
+    N = len(col_clues)
+    POP_SIZE = N * 10
     clues = np.asarray([col_clues, row_clues], dtype=object)
     experiment_manager = ExperimentManager(total_num_experiments=NUM_EXPERIMENTS)
     for EXPERIMENT_COUNT in range(NUM_EXPERIMENTS):
@@ -63,7 +62,7 @@ def main():
                                      with_stat_prints=False,
                                      experiment_manager=experiment_manager),
             # We will change the seed to be a new seed in every experiment, since we don't want duplicate results
-            random_seed=EXPERIMENT_COUNT + 15
+            random_seed=EXPERIMENT_COUNT + 1
         )
 
         algo.evolve()
@@ -75,4 +74,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+
+    nonograms_path = "InputManager/nonogram_clues.json"
+    nonograms = process_json_from_file(nonograms_path)
+    for nonogram in nonograms:
+        solve_nonogram(nonogram[0], nonogram[1])

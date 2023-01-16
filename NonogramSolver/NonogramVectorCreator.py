@@ -1,7 +1,7 @@
 import numpy as np
 from eckity.creators.creator import Creator
 from eckity.fitness.simple_fitness import SimpleFitness
-from NonogramVector import NonogramVector
+from NonogramSolver.NonogramVector import NonogramVector
 from itertools import combinations
 
 import random
